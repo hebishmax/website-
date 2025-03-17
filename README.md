@@ -1,2 +1,2 @@
-https://Silvercoin-example.github.io/website/logo.png
- (silvercoin/website-CNAME)
+https://website-example.github.io/website/logo.png
+ (website-CNAME)
