@@ -1,2 +1,2 @@
-https://website-example.github.io/website/logo.png
+(/images/image.jpg?raw=true)
  (website-CNAME)
