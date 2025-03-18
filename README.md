@@ -1,2 +1,1 @@
-IMG-20250227-WA0014.jpg
- (website-CNAME)
+"change logo"
