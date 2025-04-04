@@ -1,40 +1,40 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <title>MetaMask</title>
-  <style>
-    body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
-    .wallet-container { background: #f9f9f9; padding: 20px; border-radius: 8px; display: inline-block; }
-    input { width: 80%; padding: 8px; font-size: 16px; }
-    button { padding: 8px 16px; font-size: 16px; background-color: #f6851b; color: #fff; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px; }
-    #faucetButton { display: none; } /* إخفاء زر الصنبور حتى الضغط على "قريبًا" */
-  </style>
+    <meta charset="UTF-8">
+    <title>الإيموجي الذكي - الدفع عبر TON</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
+        .container { background: #f9f9f9; padding: 20px; border-radius: 8px; display: inline-block; }
+        button { padding: 10px 20px; font-size: 16px; background-color: #007aff; color: #fff; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+        #faucetBtn { display: none; }
+    </style>
 </head>
 <body>
-  <div class="wallet-container">
-    <h2>مرحبا بك في إيموجي الصنبور</h2>
-    <button id="soonButton" onclick="showFaucet()">قريبًا</button>
-    <br><br>
-    <button id="faucetButton" onclick="getEmoji()">اضغط للحصول على ايموجي</button>
-    <br><br>
-    <input type="text" id="userMessage" placeholder="أدخل رسالتك هنا" readonly>
-  </div>
+    <div class="container">
+        <h2>احصل على إيموجي ذكي!</h2>
+        <p>🔹 كل 0.01 TON = 1 إيموجي ذكي 🎉</p>
+        
+        <button id="connectWalletBtn">دخول محفظة TON</button>
+        <button id="payBtn" style="display:none;">ادفع 0.01 TON</button>
+        <button id="faucetBtn">احصل على الإيموجي</button>
+    </div>
 
-  <script>
-    function showFaucet() {
-      // عندما يضغط المستخدم على زر "قريبًا" يظهر رسالة "مرحبا"
-      document.getElementById("userMessage").value = "مرحبا! الآن يمكنك الضغط على زر الصنبور.";
-      // إظهار زر "الصنبور"
-      document.getElementById("faucetButton").style.display = "inline-block";
-      // إخفاء زر "قريبًا"
-      document.getElementById("soonButton").style.display = "none";
-    }
+    <script>
+        document.getElementById('connectWalletBtn').addEventListener('click', function() {
+            alert('تم الاتصال بالمحفظة! يمكنك الآن الدفع.');
+            document.getElementById('payBtn').style.display = 'inline';
+        });
 
-    function getEmoji() {
-      // عند الضغط على زر "الصنبور"، يتم إظهار إيموجي
-      alert("تم الحصول على ايموجي! 🥳");
-    }
-  </script>
+        document.getElementById('payBtn').addEventListener('click', function() {
+            alert('تم الدفع بنجاح! يمكنك الآن استلام إيموجيك.');
+            document.getElementById('payBtn').style.display = 'none';
+            document.getElementById('faucetBtn').style.display = 'inline';
+        });
+
+        document.getElementById('faucetBtn').addEventListener('click', function() {
+            alert('🎉 مبروك! حصلت على إيموجيك الذكي.');
+        });
+    </script>
 </body>
 </html>
