@@ -2,155 +2,30 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>الإيموجي الخارق الذكي</title>
+  <title>MetaMask</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin: 20px;
-      background: #f4f4f9;
-    }
-    .container {
-      max-width: 500px;
-      margin: 0 auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      margin: 10px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      background-color: #007aff;
-      color: #fff;
-    }
-    button:disabled {
-      background-color: #ccc;
-      cursor: not-allowed;
-    }
-    select {
-      padding: 10px;
-      font-size: 16px;
-      margin: 10px;
-    }
-    .status {
-      margin-top: 15px;
-      font-size: 18px;
-      color: green;
-    }
-    .animated-emoji {
-      font-size: 60px;
-      display: inline-block;
-      transition: transform 0.3s ease-in-out;
-    }
-    .animated-emoji:hover {
-      transform: scale(1.2) rotate(10deg);
-    }
-    @keyframes swing {
-      0%   { transform: rotate(0deg); }
-      25%  { transform: rotate(5deg); }
-      50%  { transform: rotate(0deg); }
-      75%  { transform: rotate(-5deg); }
-      100% { transform: rotate(0deg); }
-    }
-    .swing {
-      animation: swing 2s infinite;
-    }
-    .note {
-      font-size: 14px;
-      color: red;
-      margin-top: 10px;
-    }
+    body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
+    .wallet-container { background: #f9f9f9; padding: 20px; border-radius: 8px; display: inline-block; }
+    input { width: 80%; padding: 8px; font-size: 16px; }
+    button { padding: 8px 16px; font-size: 16px; background-color: #f6851b; color: #fff; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>الإيموجي الخارق الذكي</h1>
-    <p>كل 0.01 TON (محاكاة) تمنحك إيموجي ذكي تختاره بنفسك!</p>
-    
-    <button id="payBtn" onclick="window.location.href='https://tonkeeper.com/transfer/UQBw5LzsDZXeVBtKIOCOOc2eKN689ffblcK-qazXoE52qU6d'">دفع 0.01 TON</button>
-    
-    <div id="emojiSelection" style="display:none;">
-      <h3>اختر إيموجيك الذكي:</h3>
-      <select id="emojiList">
-        <option value="😍">😍</option>
-        <option value="😎">😎</option>
-        <option value="😭">😭</option>
-        <option value="🤣">🤣</option>
-        <option value="🫡">🫡</option>
-        <option value="😯">😯</option>
-        <option value="😉">😉</option>
-        <option value="🤓">🤓</option>
-        <option value="🥳">🥳</option>
-      </select>
-      <br>
-      <button id="claimEmojiBtn">احصل على الإيموجي</button>
-    </div>
-    
-    <div class="note">⚠️ بعد الشراء، احفظ الإيموجي في مكان خاص بك قبل شراء إيموجي جديد.</div>
-    <div class="status" id="statusMsg"></div>
-    <div id="displayEmoji" style="margin-top:20px;"></div>
-    <div id="downloadBtnContainer" style="margin-top:10px;"></div>
+  <div class="wallet-container">
+    <h2>عنوان المحفظة</h2>
+    <input type="text" id="walletAddress" value="0x61916c290c837cd1fe283dcf56801bc3a16f7b6f" readonly>
+    <br>
+    <button onclick="copyAddress()">نسخ العنوان</button>
+    <br><br>
+    <a href="https://metamask.io/" target="_blank" style="background:#f6851b; color:#fff; padding:10px 20px; text-decoration:none; border-radius:5px;">تحميل MetaMask</a>
   </div>
-
   <script>
-    if (!localStorage.getItem('hasPaid')) {
-      localStorage.setItem('hasPaid', 'false');
-    }
-
-    function updateStatus(message) {
-      document.getElementById('statusMsg').innerText = message;
-    }
-
-    document.getElementById('payBtn').addEventListener('click', function() {
-      updateStatus('بعد إتمام الدفع، يرجى العودة لاختيار إيموجيك الذكي.');
-      document.getElementById('emojiSelection').style.display = 'block';
-    });
-
-    document.getElementById('claimEmojiBtn').addEventListener('click', function() {
-      if (localStorage.getItem('hasPaid') !== 'true') {
-        updateStatus('تأكد من إتمام الدفع أولاً!');
-        return;
-      }
-      const selectedEmoji = document.getElementById('emojiList').value;
-      localStorage.setItem('userEmoji', selectedEmoji);
-      updateStatus('🎉 مبروك! حصلت على الإيموجي الذكي: ' + selectedEmoji);
-      document.getElementById('displayEmoji').innerHTML = '<span class="animated-emoji swing">' + selectedEmoji + '</span>';
-      document.getElementById('emojiSelection').style.display = 'none';
-
-      const downloadBtnContainer = document.getElementById('downloadBtnContainer');
-      downloadBtnContainer.innerHTML = '';
-      const downloadBtn = document.createElement('button');
-      downloadBtn.innerText = 'تحميل الإيموجي';
-      downloadBtn.onclick = function() {
-        const blob = new Blob([selectedEmoji], { type: 'text/plain' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = 'emoji.txt';
-        link.click();
-      };
-      downloadBtnContainer.appendChild(downloadBtn);
-    });
-
-    // استرجاع الإيموجي إذا كان محفوظًا
-    const savedEmoji = localStorage.getItem('userEmoji');
-    if (savedEmoji) {
-      document.getElementById('displayEmoji').innerHTML = '<span class="animated-emoji swing">' + savedEmoji + '</span>';
-      const downloadBtn = document.createElement('button');
-      downloadBtn.innerText = 'تحميل الإيموجي';
-      downloadBtn.onclick = function() {
-        const blob = new Blob([savedEmoji], { type: 'text/plain' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = 'emoji.txt';
-        link.click();
-      };
-      document.getElementById('downloadBtnContainer').appendChild(downloadBtn);
+    function copyAddress() {
+      var copyText = document.getElementById("walletAddress");
+      copyText.select();
+      copyText.setSelectionRange(0, 99999);
+      document.execCommand("copy");
+      alert("تم نسخ العنوان: " + copyText.value);
     }
   </script>
 </body>
