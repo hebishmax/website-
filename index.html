@@ -43,7 +43,6 @@
       font-size: 18px;
       color: green;
     }
-    /* تأثير حركة الإيموجي */
     .animated-emoji {
       font-size: 60px;
       display: inline-block;
@@ -52,7 +51,6 @@
     .animated-emoji:hover {
       transform: scale(1.2) rotate(10deg);
     }
-    /* إضافة حركة دائمة باستخدام keyframes */
     @keyframes swing {
       0%   { transform: rotate(0deg); }
       25%  { transform: rotate(5deg); }
@@ -63,6 +61,11 @@
     .swing {
       animation: swing 2s infinite;
     }
+    .note {
+      font-size: 14px;
+      color: red;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
@@ -70,10 +73,8 @@
     <h1>الإيموجي الخارق الذكي</h1>
     <p>كل 0.01 TON (محاكاة) تمنحك إيموجي ذكي تختاره بنفسك!</p>
     
-    <!-- زر الدخول إلى المحفظة باستخدام الرابط الخاص بزر الدفع -->
     <button id="payBtn" onclick="window.location.href='https://tonkeeper.com/transfer/UQBw5LzsDZXeVBtKIOCOOc2eKN689ffblcK-qazXoE52qU6d'">دفع 0.01 TON</button>
     
-    <!-- واجهة اختيار الإيموجي (مخفية مبدئيًا) -->
     <div id="emojiSelection" style="display:none;">
       <h3>اختر إيموجيك الذكي:</h3>
       <select id="emojiList">
@@ -91,40 +92,66 @@
       <button id="claimEmojiBtn">احصل على الإيموجي</button>
     </div>
     
+    <div class="note">⚠️ بعد الشراء، احفظ الإيموجي في مكان خاص بك قبل شراء إيموجي جديد.</div>
     <div class="status" id="statusMsg"></div>
-    
-    <!-- عرض الإيموجي الذكي المتحرك بعد الحصول عليه -->
     <div id="displayEmoji" style="margin-top:20px;"></div>
+    <div id="downloadBtnContainer" style="margin-top:10px;"></div>
   </div>
 
   <script>
-    // محاكاة حالة الدفع باستخدام LocalStorage
     if (!localStorage.getItem('hasPaid')) {
       localStorage.setItem('hasPaid', 'false');
     }
-    
-    // تحديث رسالة الحالة
+
     function updateStatus(message) {
       document.getElementById('statusMsg').innerText = message;
     }
-    
-    // عند الضغط على زر الدفع
+
     document.getElementById('payBtn').addEventListener('click', function() {
-      // بمجرد أن يتم الدفع (باستخدام المحفظة الخارجية)، يُفترض أن يعود المستخدم هنا
       updateStatus('بعد إتمام الدفع، يرجى العودة لاختيار إيموجيك الذكي.');
-      // إظهار واجهة اختيار الإيموجي
       document.getElementById('emojiSelection').style.display = 'block';
     });
-    
-    // عند الضغط على زر الحصول على الإيموجي
+
     document.getElementById('claimEmojiBtn').addEventListener('click', function() {
-      // التأكد من أن المستخدم قام بالدفع (محاكاة بسيطة هنا)
       if (localStorage.getItem('hasPaid') !== 'true') {
         updateStatus('تأكد من إتمام الدفع أولاً!');
         return;
       }
-      // الحصول على الإيموجي المختار من القائمة
       const selectedEmoji = document.getElementById('emojiList').value;
       localStorage.setItem('userEmoji', selectedEmoji);
       updateStatus('🎉 مبروك! حصلت على الإيموجي الذكي: ' + selectedEmoji);
-      // عرض الإيموجي الذكي مع حركة تفاعلية\n      document.getElementById('displayEmoji').innerHTML = '<span class=\"animated-emoji swing\">' + selectedEmoji + '</span>';\n      // إخفاء واجهة الاختيار\n      document.getElementById('emojiSelection').style.display = 'none';\n    });\n  </script>\n</body>\n</html>"
+      document.getElementById('displayEmoji').innerHTML = '<span class="animated-emoji swing">' + selectedEmoji + '</span>';
+      document.getElementById('emojiSelection').style.display = 'none';
+
+      const downloadBtnContainer = document.getElementById('downloadBtnContainer');
+      downloadBtnContainer.innerHTML = '';
+      const downloadBtn = document.createElement('button');
+      downloadBtn.innerText = 'تحميل الإيموجي';
+      downloadBtn.onclick = function() {
+        const blob = new Blob([selectedEmoji], { type: 'text/plain' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'emoji.txt';
+        link.click();
+      };
+      downloadBtnContainer.appendChild(downloadBtn);
+    });
+
+    // استرجاع الإيموجي إذا كان محفوظًا
+    const savedEmoji = localStorage.getItem('userEmoji');
+    if (savedEmoji) {
+      document.getElementById('displayEmoji').innerHTML = '<span class="animated-emoji swing">' + savedEmoji + '</span>';
+      const downloadBtn = document.createElement('button');
+      downloadBtn.innerText = 'تحميل الإيموجي';
+      downloadBtn.onclick = function() {
+        const blob = new Blob([savedEmoji], { type: 'text/plain' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'emoji.txt';
+        link.click();
+      };
+      document.getElementById('downloadBtnContainer').appendChild(downloadBtn);
+    }
+  </script>
+</body>
+</html>
